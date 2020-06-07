@@ -1,0 +1,87 @@
+# ===================================================================
+# Spring Boot configuration.
+#
+# This configuration will be overridden by the Spring profile you use,
+# for example application-dev.yml if you use the "dev" profile.
+#
+# ===================================================================
+
+# ===================================================================
+# Standard Spring Boot properties.
+# Full reference is available at:
+# http://docs.spring.io/spring-boot/docs/current/reference/html/common-application-properties.html
+# ===================================================================
+# set -Dspring.profiles.active=<dev|sit|int> as JVM argument to run in desired profile
+# If no profile is specified explicitly, application will fall back to default profile, which is "local"
+
+logging:
+    path: logs
+    file: ${logging.path}/post-it.log  
+    level:
+        #ROOT: INFO
+        com.xebia.postit: DEBUG
+        org.hibernate.SQL: DEBUG
+        #com.zaxxer.hikari: DEBUG
+
+spring:
+    application:
+        name: post-it
+    profiles:
+        active: dev
+    devtools: 
+        restart: 
+            exclude: application.log,*.log,*.log.*
+    datasource:
+        url: jdbc:sqlserver://localhost:1433;databaseName=postit;
+        driver-class-name: com.microsoft.sqlserver.jdbc.SQLServerDriver
+        username: sa
+        password: Welcome@12345
+    jpa:
+        show-sql: true
+        database-platform: org.hibernate.dialect.SQLServer2012Dialect
+        database: SQL_SERVER
+        open-in-view: false
+        properties:
+            hibernate.jdbc.time_zone: UTC
+        hibernate:
+            #dialect: org.hibernate.dialect.SQLServer2012Dialect
+            ddl-auto: none
+    flyway:
+        enabled: true
+        baseline-on-migrate: true
+    messages:
+        basename: i18n/messages, i18n/errors
+server:
+    port: 8090            
+                    
+# ===================================================================
+# Application specific properties
+# Add your own application properties here, see the ApplicationProperties class
+# ===================================================================
+
+application:      
+    default-date-format: yyyy-MM-dd
+    default-datetime-format: yyyy-MM-dd hh:mm a
+    default-zoned-datetime-format: dd-MM-yyyy HH:mm:ss #yyyy-MM-dd hh:mm:ssa (O)
+    default-time-format: HH:mm #yyyy-MM-dd hh:mm:ssa (O)
+    display-zone-id: UTC # UTC, Asia/Kolkata, Asia/Dubai
+    problem-stacktrace: false  
+    cors:
+        allowed-origins: "*"
+        allowed-methods: "*"
+        allowed-headers: "*"
+        exposed-headers: "Authorization,Link,X-postit-info,X-postit-warning,X-postit-success,X-postit-error"
+        #exposed-headers: "Cache-Control,Content-Type,X-Frame-Options,X-XSS-Protection,strict-transport-security,x-content-security-policy,x-content-type-options,Authorization,Link,X-Total-Count"
+        allow-credentials: true
+        max-age: 1800
+    swagger:
+        default-include-pattern: /api/.*
+        title: Xebia links sharing application API
+        description: Post It API documentation
+        version: 0.0.1
+        terms-of-service-url:
+        contact-name:
+        contact-url:
+        contact-email:
+        license:
+        license-url:
